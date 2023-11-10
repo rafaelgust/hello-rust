@@ -1,11 +1,13 @@
-use ferris_says::say;
-use std::io::{stdout, BufWriter};
+use warp::Filter;
+#[tokio::main]
+async fn main() {
+   simple_api().await;
+}
 
-fn main() {
-    let stdout = stdout();
-    let message = String::from("Hello fellow Rustaceans!");
-    let width = message.chars().count();
 
-    let mut writer = BufWriter::new(stdout.lock());
-    say(&message, width, &mut writer).unwrap();
+async fn simple_api() {
+    let hello = warp::path!("hello" / String)
+    .map(|name| format!("Hello, {}!", name));
+
+    warp::serve(hello).run(([127, 0, 0, 1], 3030)).await;
 }
